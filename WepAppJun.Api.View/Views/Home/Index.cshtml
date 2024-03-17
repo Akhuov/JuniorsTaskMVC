@@ -153,14 +153,11 @@
         }
 
         function createProduct() {
-            // Получаем значения полей формы
             var productName = document.getElementById('createProductName').value.trim();
 
-            // Получаем элементы сообщений об ошибке
             var nameField = document.getElementById('createProductName');
             var nameFeedback = nameField.nextElementSibling;
 
-            // Проверяем, заполнены ли все поля
             if (productName === '') {
                 nameField.classList.add('is-invalid');
                 nameFeedback.style.display = 'block';
@@ -171,13 +168,11 @@
 
             
 
-            // Если какое-либо поле не заполнено, прекращаем выполнение функции
             if (productName === '') {
                 console.error('Ошибка!');
                 return;
             }
 
-            // Если все поля заполнены, создаем объект FormData и отправляем запрос
             var formData = new FormData(document.getElementById('createProductForm'));
             fetch('/Home/CreateProduct', {
                 method: 'POST',
