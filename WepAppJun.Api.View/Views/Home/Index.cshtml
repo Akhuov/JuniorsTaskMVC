@@ -1,0 +1,203 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<div class="d-flex justify-content-between align-items-center mb-3">
+
+    <form asp-controller="Home" asp-action="Index" method="get" class="form-inline">
+        <div class="form-group">
+            <input type="text" style="font-size: 18px" class="form-control" name="searchString" placeholder="Поиск по наименованию">
+        </div>
+        <button type="submit" class="btn btn-primary ml-2">Поиск</button>
+    </form>
+
+    <button onclick="openCreateProductModal()" class="btn btn-success">Добавить продукт</button>
+</div>
+
+
+<div class="text-center">
+
+    <table class="table">
+        <thead>
+            <tr>
+                @* <th>ID</th> *@
+                <th>Наименование</th>
+                <th>Описание</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in Model)
+            {
+                <tr>
+                    @* <td>@product.Id</td> *@
+                    <td>@product.Name</td>
+                    <td>@product.Description</td>
+                    <td>
+                        <button onclick="openEditProductModal('@product.Id', '@product.Name', '@product.Description')" class="btn btn-primary">Edit</button>
+                        <button onclick="deleteProduct('@product.Id')" class="btn btn-danger">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+
+    @* Edit *@
+    <div class="modal fade" id="editProductModal" tabindex="-1" aria-labelledby="editProductModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editProductModalLabel">Редактирование продукта</h5>
+                    
+                </div>
+                <div class="modal-body">
+                    <form id="editProductForm">
+                        <div class="form-group">
+                            <label for="editProductName">Наименование:</label>
+                            <input type="text" class="form-control" id="editProductName" name="name">
+                        </div>
+                        <div class="form-group">
+                            <label for="editProductDescription">Описание:</label>
+                            <textarea class="form-control" id="editProductDescription" name="description"></textarea>
+                        </div>
+                        <input type="hidden" id="editProductId" name="id">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="closeModalForm()" class="btn btn-secondary">Закрыть</button>
+                    <button type="button" class="btn btn-primary" onclick="updateProduct()">Сохранить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    @* Create *@
+    <div class="modal fade" id="createProductModal" tabindex="-1" aria-labelledby="createProductModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createProductModalLabel">Создание нового продукта</h5>
+                </div>
+                <div class="modal-body">
+                    <form id="createProductForm">
+                        <div class="form-group">
+                            <label for="createProductName">Наименование:</label>
+                            <input type="text" class="form-control" id="createProductName" name="name" required>
+                            <div class="invalid-feedback">Пожалуйста, введите наименование продукта.</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="createProductDescription">Описание:</label>
+                            <textarea class="form-control" id="createProductDescription" name="description" ></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModalForm()" data-dismiss="modal">Закрыть</button>
+                    <button type="button" class="btn btn-primary" onclick="createProduct()">Сохранить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+    <form id="deleteForm" method="post">
+        <input type="hidden" id="deleteProductId" name="id" value="" />
+    </form>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function deleteProduct(productId) {
+            if (confirm('Вы уверены, что хотите удалить этот продукт?')) {
+                document.getElementById('deleteProductId').value = productId;
+                document.getElementById('deleteForm').action = "/Home/DeleteProduct";
+                document.getElementById('deleteForm').submit();
+            }
+        }
+
+        function openEditProductModal(productId, productName, productDescription) {
+            document.getElementById('editProductId').value = productId;
+            document.getElementById('editProductName').value = productName;
+            document.getElementById('editProductDescription').value = productDescription;
+
+            $('#editProductModal').modal('show');
+        }
+
+        function openCreateProductModal() {
+            $('#createProductModal').modal('show');
+        }
+
+        function updateProduct() {
+            var formData = new FormData(document.getElementById('editProductForm'));
+
+            fetch('/Home/UpdateProduct', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Ошибка при обновлении продукта');
+                    }
+                    $('#editProductModal').modal('hide');
+                    location.reload();
+                })
+                .catch(error => {
+                    console.error('Ошибка:', error);
+                });
+        }
+
+        function createProduct() {
+            // Получаем значения полей формы
+            var productName = document.getElementById('createProductName').value.trim();
+
+            // Получаем элементы сообщений об ошибке
+            var nameField = document.getElementById('createProductName');
+            var nameFeedback = nameField.nextElementSibling;
+
+            // Проверяем, заполнены ли все поля
+            if (productName === '') {
+                nameField.classList.add('is-invalid');
+                nameFeedback.style.display = 'block';
+            } else {
+                nameField.classList.remove('is-invalid');
+                nameFeedback.style.display = 'none';
+            }
+
+            
+
+            // Если какое-либо поле не заполнено, прекращаем выполнение функции
+            if (productName === '') {
+                console.error('Ошибка!');
+                return;
+            }
+
+            // Если все поля заполнены, создаем объект FormData и отправляем запрос
+            var formData = new FormData(document.getElementById('createProductForm'));
+            fetch('/Home/CreateProduct', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Ошибка при добавлении продукта');
+                    }
+                    $('#createProductModal').modal('hide');
+                    location.reload();
+                })
+                .catch(error => {
+                    console.error('Ошибка:', error);
+                });
+        }
+
+        function closeModalForm() {
+            $('#editProductModal').modal('hide');
+            $('#createProductModal').modal('hide');
+        }
+    </script>
+</div>
