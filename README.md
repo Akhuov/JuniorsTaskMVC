@@ -28,12 +28,9 @@
 
 Я выполнил ТЗ Разделив проект на 4 части(Clean architecture N-Tier) Соединение проектов реализован таким образом=>
 ====================================================================================
-WepAppJun.Api.View => Controllers,Views ...(FrontEnd) (Это основная StartUp часть программы) 
-	︾
-WepAppJun.Application => Основная логика программы (Services)
-	︾
-WepAppJun.Infrastructure => DataContext, Repositories, Migrations... 
-	︾
+WepAppJun.Api.View => Controllers,Views ...(FrontEnd) (Это основная StartUp часть программы) =>
+WepAppJun.Application => Основная логика программы (Services)=>
+WepAppJun.Infrastructure => DataContext, Repositories, Migrations... =>
 WepAppJun.Domain => Entities,models...
 =====================================================================================
 
