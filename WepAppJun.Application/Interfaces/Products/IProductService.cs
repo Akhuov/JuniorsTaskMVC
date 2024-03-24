@@ -10,5 +10,7 @@ namespace WepAppJun.Application.Interfaces.Products
         public ValueTask<bool> DeleteProductAsync(Guid Id);
         public ValueTask<List<ProductDto>> GetAllProductsAsync();
         public ValueTask<ProductDto> GetProductByIdAsync(Guid Id);
+        public List<ProductDto> SearchProductByNameAsync(string searchString, List<ProductDto> products);
+
     }
 }

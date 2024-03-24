@@ -116,5 +116,18 @@ namespace WepAppJun.Application.Services.Products
                 return null;
             }
         }
+
+        public  List<ProductDto> SearchProductByNameAsync(string searchString, List<ProductDto> products)
+        {
+            try
+            {
+                return products.Where(x => x.Name.ToLower().Contains(searchString.ToLower())).ToList();
+
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
     }
 }

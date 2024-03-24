@@ -24,7 +24,7 @@ namespace WepAppJun.Api.View.Controllers
 
             if (!string.IsNullOrEmpty(searchString))
             {
-                products = products.Where(x => x.Name.ToLower().Contains(searchString.ToLower())).ToList();
+                products = _productService.SearchProductByNameAsync(searchString, products);
             }
 
             return View(products);
