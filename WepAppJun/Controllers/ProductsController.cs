@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WepAppJun.Application.DTOs;
 using WepAppJun.Application.Interfaces.Products;
+using WepAppJun.infrastructure.DTOs;
 
 namespace WepAppJun.Controllers
 {
@@ -37,9 +37,9 @@ namespace WepAppJun.Controllers
         }
 
         [HttpPut]
-        public async ValueTask<IActionResult> UpdateProductByIdAsync(Guid Id, ProductDto dto)
+        public async ValueTask<IActionResult> UpdateProductByIdAsync(ProductDto dto)
         {
-            var res = _productService.UpdateProductAsync(Id, dto);
+            var res = _productService.UpdateProductAsync(dto);
             return Ok(res);
         }
     }

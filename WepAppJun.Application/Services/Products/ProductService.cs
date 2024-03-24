@@ -1,5 +1,6 @@
-﻿using WepAppJun.Application.DTOs;
+﻿using AutoMapper;
 using WepAppJun.Application.Interfaces.Products;
+using WepAppJun.infrastructure.DTOs;
 using WepAppJun.infrastructure.Models;
 using WepAppJun.infrastructure.Repositories.Products.Interfaces;
 
@@ -9,22 +10,24 @@ namespace WepAppJun.Application.Services.Products
     {
 
         private IProductRepository _repository;
-        public ProductService(IProductRepository repository)
+        private IMapper _mapper;
+        public ProductService(IProductRepository repository,IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
         public async ValueTask<bool> CreateProductAsync(ProductDto dto)
         {
             try
             {
-                var product = new Product()
-                {
-                    Id = Guid.NewGuid(),
-                    Name = dto.Name,
-                    Description = dto.Description,
-                };
+
+                var product = new Product();
+
+                product = _mapper.Map<Product>(dto);
+
                 var r = await _repository.CreateProductAsync(product);
+
                 return r;
             }
             catch (Exception ex)
@@ -47,15 +50,22 @@ namespace WepAppJun.Application.Services.Products
             }
         }
 
-        public async ValueTask<List<Product>> GetAllProductsAsync()
+        public async ValueTask<List<ProductDto>> GetAllProductsAsync()
         {
             try
             {
                 var res = await _repository.GetAllProductsAsync();
 
+                var result = new List<ProductDto>();
+
+                foreach (var item in res)
+                {
+                    result.Add(_mapper.Map<ProductDto>(item));
+                }
+
                 if (res != null)
                 {
-                    return res;
+                    return result;
                 }
                 else
                 {
@@ -69,15 +79,15 @@ namespace WepAppJun.Application.Services.Products
         }
 
 
-        public async ValueTask<Product> GetProductByIdAsync(Guid Id)
+        public async ValueTask<ProductDto> GetProductByIdAsync(Guid Id)
         {
-
             try
             {
                 var res = await _repository.GetAllProductsAsync();
+                var product = res.FirstOrDefault(x => x.Id == Id);
                 if (res != null)
                 {
-                    var result = res.FirstOrDefault(x => x.Id == Id);
+                    ProductDto result = _mapper.Map<ProductDto>(product);
                     return result;
 
                 }
@@ -92,18 +102,14 @@ namespace WepAppJun.Application.Services.Products
             }
         }
 
-        public async ValueTask<Product> UpdateProductAsync(Guid Id, ProductDto dto)
+        public async ValueTask<ProductDto> UpdateProductAsync(ProductDto dto)
         {
+
             try
             {
-                var product  = new Product()
-                {
-                    Id = Id,
-                    Name = dto.Name,
-                    Description = dto.Description,
-                };
+                var product = _mapper.Map<Product>(dto);
                 var res = await _repository.UpdateProductAsync(product);
-                return res;
+                return dto;
             }
             catch (Exception ex)
             {

@@ -1,7 +1,8 @@
-﻿namespace WepAppJun.Application.DTOs
+﻿namespace WepAppJun.infrastructure.DTOs
 {
     public class ProductDto
     {
+        public Guid Id { get; set; }
         public string Name { get; set; } = null!;
 
         public string? Description { get; set; }

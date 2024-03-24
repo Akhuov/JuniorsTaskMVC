@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using WepAppJun.Api.View.Models;
-using WepAppJun.Application.DTOs;
 using WepAppJun.Application.Interfaces.Products;
-using WepAppJun.infrastructure.Models;
+using WepAppJun.infrastructure.DTOs;
 
 namespace WepAppJun.Api.View.Controllers
 {
@@ -57,13 +56,9 @@ namespace WepAppJun.Api.View.Controllers
         }
 
         [HttpPost]
-        public async ValueTask<IActionResult> UpdateProduct(Product product)
+        public async ValueTask<IActionResult> UpdateProduct(ProductDto product)
         {
-            var res = _productService.UpdateProductAsync(product.Id,new ProductDto()
-            {
-                Name = product.Name,
-                Description = product.Description,
-            });
+            var res = _productService.UpdateProductAsync(product);
             return Ok(res);
         }
 
