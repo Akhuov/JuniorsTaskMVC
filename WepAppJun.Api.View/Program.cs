@@ -26,7 +26,7 @@ var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
+    app.UseExceptionHandler("/Home/Error"); 
     //new Added Middleware
     app.UseMiddleware<ExceptionHandlingMiddleware>();
 }
