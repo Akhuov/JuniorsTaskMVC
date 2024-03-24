@@ -28,10 +28,12 @@
 
 Я выполнил ТЗ Разделив проект на 4 части(Clean architecture N-Tier) Соединение проектов реализован таким образом=>
 ====================================================================================
-WepAppJun.Api.View => Controllers,Views ...(FrontEnd) (Это основная StartUp часть программы) =>
-WepAppJun.Application => Основная логика программы (Services)=>
-WepAppJun.Infrastructure => DataContext, Repositories, Migrations... =>
-WepAppJun.Domain => Entities,models...
+
+WepAppJun.Api.View: Controllers,Views ...(FrontEnd) (Это основная StartUp часть программы) => 
+WepAppJun.Application: Основная логика программы (Services) => 
+WepAppJun.Infrastructure: DataContext, Repositories, Migrations... => 
+WepAppJun.Domain: Entities,models...
+
 =====================================================================================
 
 WepAppJun => Это Api для проверки BackEnd c помошью Swagger (с начала я выполнил BackEnd и тестировал её в Swagger)
@@ -61,3 +63,8 @@ FrontEnd => Controller => Service => Repository => DbContext
 6) Сайт должен работать только с сервисом и ничего не знать о БД. С БД должен работать только сервис.
 
 	=> Если я правильно понял Это условие то я уже её выполнил, так как в с БД работают только Сервисы в папке ProductRepository (=>WepAppJun.infrastructure.Repositories.Products)
+
+
+
+
+
