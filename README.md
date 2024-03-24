@@ -39,7 +39,7 @@ WepAppJun.Domain: Entities,models...
 
 =====================================================================================
 
-WepAppJun => Это Api для проверки BackEnd c помошью Swagger (с начала я выполнил BackEnd и тестировал её в Swagger)
+WepAppJun => Это Api для проверки BackEnd c помошью Swagger. Я написал ее так как мне было удобнее так тестировать))
 
 Общение с ДБ происдит исключительно через Repositories(в WepAppJun.Infrastructure) запрос реализутся так=> 
 FrontEnd => Controller => Service => Repository => DbContext
